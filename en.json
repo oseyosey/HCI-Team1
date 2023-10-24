@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "foody",
+            "invocationName": "foodie",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -180,101 +180,6 @@
                     ]
                 },
                 {
-                    "name": "ExerciseRecommendationIntent",
-                    "slots": [
-                        {
-                            "name": "exerciseType",
-                            "type": "EXERCISE_TYPE"
-                        }
-                    ],
-                    "samples": [
-                        "recommend a {exerciseType} workout",
-                        "give me a {exerciseType} routine",
-                        "what is a good {exerciseType} workout"
-                    ]
-                },
-                {
-                    "name": "WorkoutDurationIntent",
-                    "slots": [],
-                    "samples": [
-                        "How long should I workout",
-                        "Recommend a workout duration",
-                        "How much time should I spend on cardio",
-                        "What's the ideal workout length"
-                    ]
-                },
-                {
-                    "name": "WorkoutTipIntent",
-                    "slots": [
-                        {
-                            "name": "bodyPart",
-                            "type": "BODY_PART"
-                        }
-                    ],
-                    "samples": [
-                        "Give me a workout tip",
-                        "Any tips for {bodyPart} exercises",
-                        "What should I focus on during {bodyPart} workouts",
-                        "I need advice for my workout",
-                        "Give me some advice for {bodyPart} training",
-                        "Provide a fitness tip"
-                    ]
-                },
-                {
-                    "name": "ExerciseDetailIntent",
-                    "slots": [
-                        {
-                            "name": "exercise",
-                            "type": "EXERCISE"
-                        }
-                    ],
-                    "samples": [
-                        "How to properly do {exercise}",
-                        "Show me the correct form for {exercise}"
-                    ]
-                },
-                {
-                    "name": "TrackProgressIntent",
-                    "slots": [
-                        {
-                            "name": "exerciseDone",
-                            "type": "EXERCISE_TYPE"
-                        },
-                        {
-                            "name": "duration",
-                            "type": "AMAZON.DURATION"
-                        }
-                    ],
-                    "samples": [
-                        "I did {exerciseDone} for {duration}",
-                        "I worked out for {duration} doing {exerciseDone}",
-                        "I just finished {exerciseDone} for {duration}",
-                        "Track my {duration} of {exerciseDone}"
-                    ]
-                },
-                {
-                    "name": "CreateWorkoutPlanIntent",
-                    "slots": [
-                        {
-                            "name": "duration",
-                            "type": "AMAZON.DURATION"
-                        },
-                        {
-                            "name": "workoutType",
-                            "type": "EXERCISE_TYPE"
-                        },
-                        {
-                            "name": "frequency",
-                            "type": "AMAZON.NUMBER"
-                        }
-                    ],
-                    "samples": [
-                        "create a {duration} {workoutType} plan for {frequency} days a week",
-                        "I want a {workoutType} plan for {duration} {frequency} days a week",
-                        "set up a {workoutType} workout for {duration} {frequency} times a week"
-                    ]
-                },
-                {
                     "name": "AskChatGPTIntent",
                     "slots": [
                         {
@@ -288,7 +193,9 @@
                         "get me a {question} ",
                         "can you tell us about {question} ",
                         "tell me about {question}",
-                        "chatbot {question}"
+                        "chatbot {question}",
+                        "foodie {question}",
+                        "foody {question}"
                     ]
                 },
                 {
@@ -358,98 +265,7 @@
                     ]
                 }
             ],
-            "types": [
-                {
-                    "name": "EXERCISE_TYPE",
-                    "values": [
-                        {
-                            "name": {
-                                "value": "cardio"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "strength training"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "yoga"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "aerobics"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "pilates"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "BODY_PART",
-                    "values": [
-                        {
-                            "name": {
-                                "value": "leg"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "arm"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "chest"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "back"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "core"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "EXERCISE",
-                    "values": [
-                        {
-                            "name": {
-                                "value": "push-up"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "squat"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "lunges"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "plank"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "burpee"
-                            }
-                        }
-                    ]
-                }
-            ]
+            "types": []
         }
     }
 }
