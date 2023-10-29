@@ -241,21 +241,6 @@ const ErrorHandler = {
 };
 
 
-const DestinationIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'DestinationIntent';
-    },
-    handle(handlerInput) {
-        const speakOutput = 'What type of activity would you like to do?';
-        
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-    }
-};
-
 const FoodIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -496,100 +481,6 @@ const SportIntentHandler = {
     const sport = Alexa.getSlotValue(handlerInput.requestEnvelope, 'sport') || '';
     const sportevent = Alexa.getSlotValue(handlerInput.requestEnvelope, 'sportevent') || '';
     const question = 'find me ' + sport + sportevent + ' game in ' + location;
-    gptTurboMessage.push({role:"user", content:  question});
-
-  
-  const timeoutId = setTimeout(() => {
-  console.log('API call not completed within 4 seconds. so sending a progressive call ');
-
-    let progressiveApiResponsePromise = axios.post('https://api.amazonalexa.com/v1/directives', request, {
-      headers: {
-        Authorization: `Bearer ${apiAccessToken}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      console.log('Directive sent successfully!');
-    })
-    .catch(error => {
-      console.error('Error sending directive:', error);
-    });
-    
-},4000);
-
-
-   // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
-  const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const authToken = 'Bearer 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';
-  const requestData = {
-        model : 'gpt-3.5-turbo',
-        messages: gptTurboMessage
-    };
-    
-    let apiResponsePromise = axios.post(apiUrl, requestData, {
-      headers: {
-        Authorization: authToken,
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    //progressive call 
-   
-    // Get the API access token and request ID
-    const apiAccessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
-    const requestId = handlerInput.requestEnvelope.request.requestId;
-
-   
-    const index_filler = Math.floor(Math.random() * 8);
-    const repromptText = fillers[index_filler];
-    
-   
-   const directive = {
-      type: 'VoicePlayer.Speak',
-      speech: repromptText, //+ '<break time="5s"/>' + 'still looking',
-    };
-    const request = {
-      header: {
-        requestId: requestId
-      },
-      directive: directive
-    };
-
-  try{
-    const apiResponse = await apiResponsePromise;
-    clearTimeout(timeoutId);
-   
-    const finalSpeech = ` ${apiResponse.data.choices[0].message.content}`;
-    const index2 = Math.floor(Math.random() * 3);
-    gptTurboMessage.push({role:apiResponse.data.choices[0].message.role, content: apiResponse.data.choices[0].message.content});
-    return handlerInput.responseBuilder
-      .speak(finalSpeech)
-      .reprompt(other[index2])
-      .getResponse();
-}
-catch (error){
-    console.error(error);
-    handlerInput.responseBuilder
-      .speak('Something went wrong. I cannot connect to my base.');
-}
-
-  }
-};
-
-const TouristIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'TouristIntent';
-  },
-  
-  
-  async handle(handlerInput) {
-    const event = Alexa.getSlotValue(handlerInput.requestEnvelope, 'event') || '';
-    const landmarks = Alexa.getSlotValue(handlerInput.requestEnvelope, 'landmarks') || '';
-    const localbusiness = Alexa.getSlotValue(handlerInput.requestEnvelope, 'localbusiness') || '';
-    const localbusinesstype = Alexa.getSlotValue(handlerInput.requestEnvelope, 'localbusinesstype') || '';
-    const organization = Alexa.getSlotValue(handlerInput.requestEnvelope, 'organization') || '';
-    const question = 'find me ' + event + landmarks + localbusiness + localbusinesstype + organization + ' tourism in ' + location;
     gptTurboMessage.push({role:"user", content:  question});
 
   
