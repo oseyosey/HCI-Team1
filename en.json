@@ -16,40 +16,6 @@
                     "samples": []
                 },
                 {
-                    "name": "DestinationIntent",
-                    "slots": [],
-                    "samples": [
-                        "destinations with historic landmarks",
-                        "summer vacation",
-                        "summer getaway",
-                        "winter vacation",
-                        "suggest a scenic destination",
-                        "suggest a scenic route ",
-                        "hidden gem destinations",
-                        "suggest a vacation destination",
-                        "recommend a family-friendly vacation spot",
-                        "tell me about the top travel destinations for this season",
-                        "weekend escape",
-                        "Suggest a destination with beautiful natural landscapes",
-                        "suggest a destination for a solo traveler",
-                        "what is a popular destination",
-                        "budget-friendly travel destinations",
-                        "historical locations",
-                        "historical travel locations",
-                        "historical destinations",
-                        "cultural experiences",
-                        "new places to go",
-                        "tell me what is in the area",
-                        "destinations nearby",
-                        "what is there to do",
-                        "what is nearby",
-                        "where can I go",
-                        "give me a new destination",
-                        "what are some cool places to visit",
-                        "recommend places down the street"
-                    ]
-                },
-                {
                     "name": "AMAZON.NavigateHomeIntent",
                     "samples": []
                 },
@@ -71,71 +37,6 @@
                     ],
                     "samples": [
                         "breakfast",
-                        "brunch",
-                        "chow",
-                        "dining",
-                        "dine",
-                        "dinner",
-                        "eat",
-                        "fine dining",
-                        "food",
-                        "{foodestablishment} restaurant",
-                        "{foodestablishment} ",
-                        "food options in {food}",
-                        "{food}",
-                        "{food} restaurant ",
-                        "find restaurant",
-                        "get some takeout",
-                        "get takeout",
-                        "go get dinner",
-                        "go out to eat",
-                        "grab a bite",
-                        "grab some food",
-                        "have a meal",
-                        "have a bite",
-                        "lunch",
-                        "meal",
-                        "munch",
-                        "nibble"
-                    ]
-                },
-                {
-                    "name": "ArtIntent",
-                    "slots": [
-                        {
-                            "name": "musicevent",
-                            "type": "AMAZON.MusicEvent"
-                        },
-                        {
-                            "name": "musicvenue",
-                            "type": "AMAZON.MusicVenue"
-                        },
-                        {
-                            "name": "theater",
-                            "type": "AMAZON.MovieTheater"
-                        },
-                        {
-                            "name": "festival",
-                            "type": "AMAZON.Festival"
-                        }
-                    ],
-                    "samples": [
-                        "go to {festival} ",
-                        "{festival}",
-                        "{theater}",
-                        "go to {theater} ",
-                        "what {musicvenue} is there",
-                        "{musicvenue} ",
-                        "{musicevent} ",
-                        "places to see {musicevent}",
-                        "see a play",
-                        "go to a performance",
-                        "theater",
-                        "see something musical",
-                        "music",
-                        "singing",
-                        "see a show",
-                        "performance"
                     ]
                 },
                 {
