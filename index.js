@@ -79,7 +79,7 @@ const GenericVisitIntentHandler = {
 
 // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const authToken = 'Bearer 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';
+  const authToken = 'Bearer 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';
   const requestData = {
         model : 'gpt-3.5-turbo',
         messages: gptTurboMessage
@@ -244,325 +244,8 @@ const ErrorHandler = {
 };
 
 
-const FoodIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'FoodIntent';
-  },
-  
-  async handle(handlerInput) {
-    const food = Alexa.getSlotValue(handlerInput.requestEnvelope, 'food') || '';
-    const restaurant = Alexa.getSlotValue(handlerInput.requestEnvelope, 'foodestablishment') || '';
-    const question = 'find me ' + food + restaurant + ' food in ' + location;
-    gptTurboMessage.push({role:"user", content:  question});
-
-  
-  const timeoutId = setTimeout(() => {
-  console.log('API call not completed within 4 seconds. so sending a progressive call ');
-
-    let progressiveApiResponsePromise = axios.post('https://api.amazonalexa.com/v1/directives', request, {
-      headers: {
-        Authorization: `Bearer ${apiAccessToken}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      console.log('Directive sent successfully!');
-    })
-    .catch(error => {
-      console.error('Error sending directive:', error);
-    });
-    
-},4000);
 
 
-   // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
-  const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const authToken = 'Bearer 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';
-  const requestData = {
-        model : 'gpt-3.5-turbo',
-        messages: gptTurboMessage
-    };
-    
-    let apiResponsePromise = axios.post(apiUrl, requestData, {
-      headers: {
-        Authorization: authToken,
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    //progressive call 
-   
-    // Get the API access token and request ID
-    const apiAccessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
-    const requestId = handlerInput.requestEnvelope.request.requestId;
-
-   
-    const index_filler = Math.floor(Math.random() * 8);
-    const repromptText = fillers[index_filler];
-    
-   
-   const directive = {
-      type: 'VoicePlayer.Speak',
-      speech: repromptText, //+ '<break time="5s"/>' + 'still looking',
-    };
-    const request = {
-      header: {
-        requestId: requestId
-      },
-      directive: directive
-    };
-
-  try{
-    const apiResponse = await apiResponsePromise;
-    clearTimeout(timeoutId);
-   
-    const finalSpeech = ` ${apiResponse.data.choices[0].message.content}.`;
-    const index2 = Math.floor(Math.random() * 3);
-    gptTurboMessage.push({role:apiResponse.data.choices[0].message.role, content: apiResponse.data.choices[0].message.content});
-    return handlerInput.responseBuilder
-      .speak(finalSpeech)
-      .reprompt(other[index2])
-      .getResponse();
-}
-catch (error){
-    console.error(error);
-    handlerInput.responseBuilder
-      .speak('Something went wrong. I cannot connect to my base.');
-}
-
-  }
-};
-
-const ArtIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'ArtIntent';
-  },
-  
-  
-  async handle(handlerInput) {
-    const musicevent = Alexa.getSlotValue(handlerInput.requestEnvelope, 'musicevent') || '';
-    const musicvenue = Alexa.getSlotValue(handlerInput.requestEnvelope, 'musicvenue') || '';
-    const theater = Alexa.getSlotValue(handlerInput.requestEnvelope, 'theater') || '';
-    const festival = Alexa.getSlotValue(handlerInput.requestEnvelope, 'festival') || '';
-    const question = 'find me ' + musicevent + musicvenue + theater + festival + ' performance in ' + location;
-    gptTurboMessage.push({role:"user", content:  question});
-
-  
-  const timeoutId = setTimeout(() => {
-  console.log('API call not completed within 4 seconds. so sending a progressive call ');
-
-    let progressiveApiResponsePromise = axios.post('https://api.amazonalexa.com/v1/directives', request, {
-      headers: {
-        Authorization: `Bearer ${apiAccessToken}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      console.log('Directive sent successfully!');
-    })
-    .catch(error => {
-      console.error('Error sending directive:', error);
-    });
-    
-},4000);
-
-
-   // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
-  const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const authToken = 'Bearer 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';
-  const requestData = {
-        model : 'gpt-3.5-turbo',
-        messages: gptTurboMessage
-    };
-    
-    let apiResponsePromise = axios.post(apiUrl, requestData, {
-      headers: {
-        Authorization: authToken,
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    //progressive call 
-   
-    // Get the API access token and request ID
-    const apiAccessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
-    const requestId = handlerInput.requestEnvelope.request.requestId;
-
-   
-    const index_filler = Math.floor(Math.random() * 8);
-    const repromptText = fillers[index_filler];
-    
-   
-   const directive = {
-      type: 'VoicePlayer.Speak',
-      speech: repromptText, //+ '<break time="5s"/>' + 'still looking',
-    };
-    const request = {
-      header: {
-        requestId: requestId
-      },
-      directive: directive
-    };
-
-  try{
-    const apiResponse = await apiResponsePromise;
-    clearTimeout(timeoutId);
-   
-    const finalSpeech = ` ${apiResponse.data.choices[0].message.content}`;
-    const index2 = Math.floor(Math.random() * 3);
-    gptTurboMessage.push({role:apiResponse.data.choices[0].message.role, content: apiResponse.data.choices[0].message.content});
-    return handlerInput.responseBuilder
-      .speak(finalSpeech)
-      .reprompt(other[index2])
-      .getResponse();
-}
-catch (error){
-    console.error(error);
-    handlerInput.responseBuilder
-      .speak('Something went wrong. I cannot connect to my base.');
-}
-
-  }
-};
-
-const TimeIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'TimeIntent';
-    },
-    handle(handlerInput) {
-        const speakOutput = (Math.floor(Math.random() * 8) + 4) + ':00 is when it begins!';
-        
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-    }
-};
-
-const ReviewIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'ReviewIntent';
-    },
-    handle(handlerInput) {
-        const speakOutput = 'It has a ' + (Math.floor(Math.random() * 3) + 2) + ' out of five star rating!';
-        
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-    }
-};
-
-const LocationIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'LocationIntent';
-    },
-    handle(handlerInput) {
-        location = Alexa.getSlotValue(handlerInput.requestEnvelope, 'location');
-        const speakOutput = 'Okay, I have you located in ' + location + '. Let\'s get started!' ;
-        
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-    }
-};
-
-const SportIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'SportIntent';
-  },
-  
-  
-  async handle(handlerInput) {
-    const sport = Alexa.getSlotValue(handlerInput.requestEnvelope, 'sport') || '';
-    const sportevent = Alexa.getSlotValue(handlerInput.requestEnvelope, 'sportevent') || '';
-    const question = 'find me ' + sport + sportevent + ' game in ' + location;
-    gptTurboMessage.push({role:"user", content:  question});
-
-  
-  const timeoutId = setTimeout(() => {
-  console.log('API call not completed within 4 seconds. so sending a progressive call ');
-
-    let progressiveApiResponsePromise = axios.post('https://api.amazonalexa.com/v1/directives', request, {
-      headers: {
-        Authorization: `Bearer ${apiAccessToken}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      console.log('Directive sent successfully!');
-    })
-    .catch(error => {
-      console.error('Error sending directive:', error);
-    });
-    
-},4000);
-
-
-   // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
-  const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const authToken = 'Bearer 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';
-  const requestData = {
-        model : 'gpt-3.5-turbo',
-        messages: gptTurboMessage
-    };
-    
-    let apiResponsePromise = axios.post(apiUrl, requestData, {
-      headers: {
-        Authorization: authToken,
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    //progressive call 
-   
-    // Get the API access token and request ID
-    const apiAccessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
-    const requestId = handlerInput.requestEnvelope.request.requestId;
-
-   
-    const index_filler = Math.floor(Math.random() * 8);
-    const repromptText = fillers[index_filler];
-    
-   
-   const directive = {
-      type: 'VoicePlayer.Speak',
-      speech: repromptText, //+ '<break time="5s"/>' + 'still looking',
-    };
-    const request = {
-      header: {
-        requestId: requestId
-      },
-      directive: directive
-    };
-
-  try{
-    const apiResponse = await apiResponsePromise;
-    clearTimeout(timeoutId);
-   
-    const finalSpeech = ` ${apiResponse.data.choices[0].message.content}`;
-    const index2 = Math.floor(Math.random() * 3);
-    gptTurboMessage.push({role:apiResponse.data.choices[0].message.role, content: apiResponse.data.choices[0].message.content});
-    return handlerInput.responseBuilder
-      .speak(finalSpeech)
-      .reprompt(other[index2])
-      .getResponse();
-}
-catch (error){
-    console.error(error);
-    handlerInput.responseBuilder
-      .speak('Something went wrong. I cannot connect to my base.');
-}
-
-  }
-};
 
 const AskChatGPTIntentHandlerLightning = {
   canHandle(handlerInput) {
@@ -598,7 +281,7 @@ const AskChatGPTIntentHandlerLightning = {
 
    // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const authToken = 'Bearer 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';
+  const authToken = 'Bearer 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';
   const requestData = {
         model : 'gpt-4',
         messages: gptTurboMessage_lightning
@@ -688,7 +371,7 @@ const AskChatGPTIntentHandler = {
 
    // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const authToken = 'Bearer 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';
+  const authToken = 'Bearer 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';
   const requestData = {
         model : 'gpt-4',
         messages: gptTurboMessage_refined
@@ -761,12 +444,6 @@ exports.handler = Alexa.SkillBuilders.custom()
         SessionEndedRequestHandler,
         AskChatGPTIntentHandler,
         AskChatGPTIntentHandlerLightning,
-        FoodIntentHandler,
-        ArtIntentHandler,
-        TimeIntentHandler,
-        ReviewIntentHandler,
-        LocationIntentHandler,
-        SportIntentHandler,
         IntentReflectorHandler)
     .addErrorHandlers(
         ErrorHandler)
