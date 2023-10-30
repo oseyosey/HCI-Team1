@@ -7,6 +7,9 @@
 const Alexa = require('ask-sdk-core');
 const {Configuration, OpenAIApi} = require('openai');
 var gptTurboMessage =  [{role:"system", content: "As an AI nutritionist, your primary purpose is to understand the user's dietary needs and preferences. Users should be able to ask you questions about recipes, dietary advice, and nutritional information. Start by asking the user about their dietary restrictions, health goals, and specific food preferences. Gather this information, and once you've understood their needs, be prepared to provide recipes, dietary advice, and answer any questions they may have related to food and nutrition. Maintain a conversational approach, ask follow-up questions for clarity, and avoid unnecessary repetitions. Keep your responses under 25 words."}]; //Try to be brief when possible.
+var gptTurboMessage_refined = [{role:"system", content: "As an AI nutritionist and cooking assistant, your primary purpose is to understand the user's dietary needs and preferences to assist them with cooking and recipe-related questions. Users should be able to ask you questions about recipes, dietary advice, and nutritional information. Start by asking the user about their dietary restrictions, health goals, and specific food preferences. When asking these questions, ask only one question at a time and wait for the user’s response to ask about the next topic. Gather this information, and once you've understood their needs, be prepared to provide recipes, dietary advice, and answer any questions they may have related to food and nutrition. If a user asks for a meal suggestions, do not give them the recipe right away, but prompt if they would like to hear the recipe. If the user says they are in the process of cooking and asks for the recipe, give the recipe to them in steps and ask if they are ready for the next step. Maintain a conversational approach, ask follow-up questions for clarity, and avoid unnecessary repetitions. If an ingredient has another name in parenthesis, avoid repeating it. Keep your responses under 50 words."}];
+var gptTurboMessage_lightning = [{role:"system", content: "As an AI nutritionist and express cooking assistant, your primary role is to quickly discern the user's dietary needs and preferences, and promptly recommend a suitable recipe. Begin by asking the user about their dietary restrictions, health goals, and specific food preferences. Based on this brief interaction, offer a single recipe recommendation that aligns with their needs. Keep the conversation efficient and concise, focusing on key details. Limit your responses to under 50 words, and ensure that you provide the recipe in a straightforward manner without unnecessary repetitions."}];
+
 const axios = require('axios');
 const fs = require("fs");
 
@@ -561,17 +564,17 @@ catch (error){
   }
 };
 
-const AskChatGPTIntentHandler = {
+const AskChatGPTIntentHandlerLightning = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AskChatGPTIntent';
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AskChatGPTIntentLightning';
   },
   
   
   async handle(handlerInput) {
     const question = 
             Alexa.getSlotValue(handlerInput.requestEnvelope, 'question');
-    gptTurboMessage.push({role:"user", content:  question});
+    gptTurboMessage_refined.push({role:"user", content:  question});
 
   
   const timeoutId = setTimeout(() => {
@@ -598,7 +601,7 @@ const AskChatGPTIntentHandler = {
   const authToken = 'Bearer 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';
   const requestData = {
         model : 'gpt-3.5-turbo',
-        messages: gptTurboMessage
+        messages: gptTurboMessage_refined
     };
     
     let apiResponsePromise = axios.post(apiUrl, requestData, {
@@ -650,6 +653,97 @@ catch (error){
 
   }
 };
+
+const AskChatGPTIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AskChatGPTIntent';
+  },
+  
+  
+  async handle(handlerInput) {
+    const question = 
+            Alexa.getSlotValue(handlerInput.requestEnvelope, 'question');
+    gptTurboMessage_lightning.push({role:"user", content:  question});
+
+  
+  const timeoutId = setTimeout(() => {
+  console.log('API call not completed within 4 seconds. so sending a progressive call ');
+
+    let progressiveApiResponsePromise = axios.post('https://api.amazonalexa.com/v1/directives', request, {
+      headers: {
+        Authorization: `Bearer ${apiAccessToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      console.log('Directive sent successfully!');
+    })
+    .catch(error => {
+      console.error('Error sending directive:', error);
+    });
+    
+},4000);
+
+
+   // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
+  const apiUrl = 'https://api.openai.com/v1/chat/completions';
+  const authToken = 'Bearer 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';
+  const requestData = {
+        model : 'gpt-3.5-turbo',
+        messages: gptTurboMessage_refined
+    };
+    
+    let apiResponsePromise = axios.post(apiUrl, requestData, {
+      headers: {
+        Authorization: authToken,
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    //progressive call 
+   
+    // Get the API access token and request ID
+    const apiAccessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
+    const requestId = handlerInput.requestEnvelope.request.requestId;
+
+   
+    const index_filler = Math.floor(Math.random() * 8);
+    const repromptText = fillers[index_filler];
+    
+   
+   const directive = {
+      type: 'VoicePlayer.Speak',
+      speech: repromptText, //+ '<break time="5s"/>' + 'still looking',
+    };
+    const request = {
+      header: {
+        requestId: requestId
+      },
+      directive: directive
+    };
+
+  try{
+    const apiResponse = await apiResponsePromise;
+    clearTimeout(timeoutId);
+   
+    const finalSpeech = ` ${apiResponse.data.choices[0].message.content}`;
+    const index2 = Math.floor(Math.random() * 3);
+    gptTurboMessage.push({role:apiResponse.data.choices[0].message.role, content: apiResponse.data.choices[0].message.content});
+    return handlerInput.responseBuilder
+      .speak(finalSpeech)
+      .reprompt(other[index2])
+      .getResponse();
+}
+catch (error){
+    console.error(error);
+    handlerInput.responseBuilder
+      .speak('Something went wrong. I cannot connect to my base.');
+}
+
+  }
+};
+
 
 /**
  * This handler acts as the entry point for your skill, routing all request and response
