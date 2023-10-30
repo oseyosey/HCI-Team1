@@ -24,22 +24,6 @@
                     "samples": []
                 },
                 {
-                    "name": "FoodIntent",
-                    "slots": [
-                        {
-                            "name": "food",
-                            "type": "AMAZON.Food"
-                        },
-                        {
-                            "name": "foodestablishment",
-                            "type": "AMAZON.FoodEstablishment"
-                        }
-                    ],
-                    "samples": [
-                        "breakfast",
-                    ]
-                },
-                {
                     "name": "ReviewIntent",
                     "slots": [],
                     "samples": [
@@ -111,7 +95,7 @@
                         "foodie foodie {question}",
                         "foody foody {question}",
                         "foodie foody {question}",
-                         "foody foodie {question}",
+                        "foody foodie {question}"
                     ]
                 },
                 {
