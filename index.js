@@ -7,8 +7,8 @@
 const Alexa = require('ask-sdk-core');
 const {Configuration, OpenAIApi} = require('openai');
 var gptTurboMessage =  [{role:"system", content: "As an AI nutritionist, your primary purpose is to understand the user's dietary needs and preferences. Users should be able to ask you questions about recipes, dietary advice, and nutritional information. Start by asking the user about their dietary restrictions, health goals, and specific food preferences. Gather this information, and once you've understood their needs, be prepared to provide recipes, dietary advice, and answer any questions they may have related to food and nutrition. Maintain a conversational approach, ask follow-up questions for clarity, and avoid unnecessary repetitions. Keep your responses under 25 words."}]; //Try to be brief when possible.
-var gptTurboMessage_refined = [{role:"system", content: "As an AI nutritionist and cooking assistant, your primary purpose is to understand the user's dietary needs and preferences to assist them with cooking and recipe-related questions. Users should be able to ask you questions about recipes, dietary advice, and nutritional information. Start by asking the user about their dietary restrictions, health goals, and specific food preferences. When asking these questions, ask only one question at a time and wait for the user’s response to ask about the next topic. Gather this information, and once you've understood their needs, be prepared to provide recipes, dietary advice, and answer any questions they may have related to food and nutrition. If a user asks for a meal suggestions, do not give them the recipe right away, but prompt if they would like to hear the recipe. If the user says they are in the process of cooking and asks for the recipe, give the recipe to them in steps and ask if they are ready for the next step. Maintain a conversational approach, ask follow-up questions for clarity, and avoid unnecessary repetitions. If an ingredient has another name in parenthesis, avoid repeating it. Keep your responses under 50 words."}];
-var gptTurboMessage_lightning = [{role:"system", content: "As an AI nutritionist and express cooking assistant, your primary role is to quickly discern the user's dietary needs and preferences, and promptly recommend a suitable recipe. Begin by asking the user about their dietary restrictions, health goals, and specific food preferences. Based on this brief interaction, offer a single recipe recommendation that aligns with their needs. Keep the conversation efficient and concise, focusing on key details. Limit your responses to under 50 words, and ensure that you provide the recipe in a straightforward manner without unnecessary repetitions."}];
+var gptTurboMessage_refined = [{role:"system", content: "As an AI nutritionist and cooking assistant, your primary purpose is to understand the user's dietary needs and preferences to assist them with cooking and recipe-related questions. Users should be able to ask you questions about recipes, dietary advice, and nutritional information. Start by asking the user about their dietary restrictions, health goals, and specific food preferences. When asking these questions, ask only one question at a time and wait for the user’s response to ask about the next topic. Gather this information, and once you've understood their needs, be prepared to provide recipes, dietary advice, and answer any questions they may have related to food and nutrition. If a user asks for a meal suggestions, do not give them the recipe right away, but prompt if they would like to hear the recipe. If the user says they are in the process of cooking and asks for the recipe, give the recipe to them in steps and ask if they are ready for the next step. Maintain a conversational approach, ask follow-up questions for clarity, and avoid unnecessary repetitions. If an ingredient has another name in parenthesis, avoid repeating it. Keep your responses under 20 words."}];
+var gptTurboMessage_lightning = [{role:"system", content: "As an AI nutritionist and express cooking assistant, your primary role is to quickly discern the user's dietary needs and preferences, and promptly recommend a suitable recipe. Begin by asking the user about their dietary restrictions, health goals, and specific food preferences. Based on this brief interaction, offer a single recipe recommendation that aligns with their needs. Keep the conversation efficient and concise, focusing on key details. Limit your responses to under 20 words, and ensure that you provide the recipe in a straightforward manner without unnecessary repetitions."}];
 
 const axios = require('axios');
 const fs = require("fs");
@@ -598,9 +598,9 @@ const AskChatGPTIntentHandlerLightning = {
 
    // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const authToken = 'Bearer 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';
+  const authToken = 'Bearer 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';
   const requestData = {
-        model : 'gpt-3.5-turbo',
+        model : 'gpt-4',
         messages: gptTurboMessage_lightning
     };
     
@@ -639,7 +639,7 @@ const AskChatGPTIntentHandlerLightning = {
    
     const finalSpeech = ` ${apiResponse.data.choices[0].message.content}`;
     const index2 = Math.floor(Math.random() * 3);
-    gptTurboMessage.push({role:apiResponse.data.choices[0].message.role, content: apiResponse.data.choices[0].message.content});
+    gptTurboMessage_lightning.push({role:apiResponse.data.choices[0].message.role, content: apiResponse.data.choices[0].message.content});
     return handlerInput.responseBuilder
       .speak(finalSpeech)
       .reprompt(other[index2])
@@ -688,9 +688,9 @@ const AskChatGPTIntentHandler = {
 
    // make a POST API call to the OpenAI GPT-3.5 turbo endpoint
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const authToken = 'Bearer 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';
+  const authToken = 'Bearer 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';
   const requestData = {
-        model : 'gpt-3.5-turbo',
+        model : 'gpt-4',
         messages: gptTurboMessage_refined
     };
     
@@ -729,7 +729,7 @@ const AskChatGPTIntentHandler = {
    
     const finalSpeech = ` ${apiResponse.data.choices[0].message.content}`;
     const index2 = Math.floor(Math.random() * 3);
-    gptTurboMessage.push({role:apiResponse.data.choices[0].message.role, content: apiResponse.data.choices[0].message.content});
+    gptTurboMessage_refined.push({role:apiResponse.data.choices[0].message.role, content: apiResponse.data.choices[0].message.content});
     return handlerInput.responseBuilder
       .speak(finalSpeech)
       .reprompt(other[index2])
@@ -760,14 +760,13 @@ exports.handler = Alexa.SkillBuilders.custom()
         FallbackIntentHandler,
         SessionEndedRequestHandler,
         AskChatGPTIntentHandler,
-        DestinationIntentHandler,
+        AskChatGPTIntentHandlerLightning,
         FoodIntentHandler,
         ArtIntentHandler,
         TimeIntentHandler,
         ReviewIntentHandler,
         LocationIntentHandler,
         SportIntentHandler,
-        TouristIntentHandler,
         IntentReflectorHandler)
     .addErrorHandlers(
         ErrorHandler)
