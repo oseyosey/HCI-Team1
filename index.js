@@ -574,7 +574,7 @@ const AskChatGPTIntentHandlerLightning = {
   async handle(handlerInput) {
     const question = 
             Alexa.getSlotValue(handlerInput.requestEnvelope, 'question');
-    gptTurboMessage_refined.push({role:"user", content:  question});
+    gptTurboMessage_lightning.push({role:"user", content:  question});
 
   
   const timeoutId = setTimeout(() => {
@@ -601,7 +601,7 @@ const AskChatGPTIntentHandlerLightning = {
   const authToken = 'Bearer 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';
   const requestData = {
         model : 'gpt-3.5-turbo',
-        messages: gptTurboMessage_refined
+        messages: gptTurboMessage_lightning
     };
     
     let apiResponsePromise = axios.post(apiUrl, requestData, {
@@ -664,7 +664,7 @@ const AskChatGPTIntentHandler = {
   async handle(handlerInput) {
     const question = 
             Alexa.getSlotValue(handlerInput.requestEnvelope, 'question');
-    gptTurboMessage_lightning.push({role:"user", content:  question});
+    gptTurboMessage_refined.push({role:"user", content:  question});
 
   
   const timeoutId = setTimeout(() => {
