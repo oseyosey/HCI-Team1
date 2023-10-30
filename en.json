@@ -100,6 +100,21 @@
                     ]
                 },
                 {
+                    "name": "AskChatGPTIntentLightning",
+                    "slots": [
+                        {
+                            "name": "question",
+                            "type": "AMAZON.SearchQuery"
+                        }
+                    ],
+                    "samples": [
+                        "foodie foodie {question}",
+                        "foody foody {question}",
+                        "foodie foody {question}",
+                         "foody foodie {question}",
+                    ]
+                },
+                {
                     "name": "LocationIntent",
                     "slots": [
                         {
