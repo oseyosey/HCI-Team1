@@ -34,7 +34,7 @@ const LaunchRequestHandler = {
         const index = Math.floor(Math.random() * 3);
         const index_hi = Math.floor(Math.random() * 3);
         const index2 = Math.floor(Math.random() * 3);
-        const speakOutput = intro_hi[index_hi] + "Hello! I'm Foodie, your AI culinary companion here to inspire your next delicious creation."
+        const speakOutput = intro_hi[index_hi] + "Hello! I'm Foodie, your AI culinary companion here to help you with anything related to recipes and cooking! What can I help you with?";
         const reprompting = intro[index2];
         return handlerInput.responseBuilder
             .speak(speakOutput)
